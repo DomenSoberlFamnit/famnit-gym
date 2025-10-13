@@ -1,0 +1,64 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "famnit-gym"
+dynamic = ["version"]
+description = 'Gymnasium environments used for the IS course at UP FAMNIT.'
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+keywords = ["gymnasium"]
+authors = [
+  { name = "Domen Šoberl", email = "domen.soberl@famnit.upr.si" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "Farama-Notifications>=0.0.4",
+  "gymnasium>=1.2.1",
+  "numpy>=2.3.3",
+  "pygame>=2.6.1",
+  "typing_extensions>=4.15.0",
+]
+
+[project.urls]
+Documentation = "https://github.com/DomenSoberlFamnit/famnit-gym#readme"
+Issues = "https://github.com/DomenSoberlFamnit/famnit-gym/issues"
+Source = "https://github.com/DomenSoberlFamnit/famnit-gym"
+
+[tool.hatch.version]
+path = "famnit_gym/__about__.py"
+
+[tool.hatch.envs.types]
+extra-dependencies = [
+  "mypy>=1.0.0",
+]
+
+[tool.coverage.run]
+source_pkgs = ["famnit_gym"]
+branch = true
+parallel = true
+omit = [
+]
+
+[tool.coverage.paths]
+famnit_gym = ["famnit_gym"]
+tests = []
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]
