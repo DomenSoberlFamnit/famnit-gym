@@ -12,7 +12,7 @@ pip install famnit_gym@git+https://github.com/DomenSoberlFamnit/famnit-gym
 
 ### Sokoban
 
-A minimum example with random actions:
+A minimal example with random actions:
 
 ```python
 import gymnasium as gym
