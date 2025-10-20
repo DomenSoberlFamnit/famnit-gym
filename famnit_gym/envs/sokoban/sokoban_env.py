@@ -7,6 +7,7 @@ import famnit_gym.envs.sokoban as sokoban
 
 class SokobanEnv(gym.Env):
     metadata = {
+        "name": "famnit_gym/Sokoban-v1",
         "render_modes": ["human"],
         "render_fps": 60,
     }
@@ -109,6 +110,7 @@ class SokobanEnv(gym.Env):
         
         self._steps += 1
         
+        reward = 1 if self._map.game_finished() else 0 
         terminated = self._map.game_finished()
         observation = self._get_obs()
         info = self._get_info()
