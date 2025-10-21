@@ -42,7 +42,7 @@ class MillEnv(AECEnv):
         # Observation is an array of board positions: 0 - empty, 1 - player_1, 2 - player_2.
         self._observation_space = gym.spaces.Box(
             low=0, high=2,
-            shape=(25,),
+            shape=(24,),
             dtype=np.uint8
         )
 
@@ -80,7 +80,7 @@ class MillEnv(AECEnv):
 
     def observe(self, agent):
         # All agents observe the same board.
-        return np.array(self._model._board)
+        return np.array(self._model._board)[1:]
     
     def close(self):
         pass
@@ -268,14 +268,29 @@ class MillEnv(AECEnv):
 
             # Paint the current board.
             self._paint_board()
+            self._paint_pieces()
             pygame.display.flip()
     
     def _paint_piece(self, x, y, color1, color2):
+        # Paint a single piece at the given position.
         surface = self._surface
         pygame.gfxdraw.filled_circle(surface, x, y, 30, color1)
         pygame.gfxdraw.aacircle(surface, x, y, 30, color1)
         pygame.gfxdraw.filled_circle(surface, x, y, 20, color2)
         pygame.gfxdraw.aacircle(surface, x, y, 20, color2)
+
+    def _paint_pieces(self):
+        # Paint all the pieces on the board.
+        for (i, (row, col)) in enumerate(self._render_positions):
+            position = i + 1
+
+            # Player 1 piece
+            if self._model._board[position] == 1:
+                self._paint_piece(50 + col * 100, 50 + row * 100, (128, 0, 64), (192, 0, 0))
+            
+            # Player 2 piece
+            elif self._model._board[position] == 2:
+                self._paint_piece(50 + col * 100, 50 + row * 100, (128, 160, 0), (192, 192, 0))
 
     def _paint_board(self):
             surface = self._surface
@@ -300,22 +315,11 @@ class MillEnv(AECEnv):
             pygame.draw.line(surface, "black", pygame.math.Vector2((50, 650)), pygame.math.Vector2((250, 450)), 14)
             pygame.draw.line(surface, "black", pygame.math.Vector2((450, 250)), pygame.math.Vector2((650, 50)), 14)
 
-            # Circles and pieces
+            # Circles
             for (i, (row, col)) in enumerate(self._render_positions):
                 position = i + 1
-
-                # Player 1 piece
-                if self._model._board[position] == 1:
-                    self._paint_piece(50 + col * 100, 50 + row * 100, (128, 0, 64), (192, 0, 0))
-                
-                # Player 2 piece
-                elif self._model._board[position] == 2:
-                    self._paint_piece(50 + col * 100, 50 + row * 100, (128, 160, 0), (192, 192, 0))
-                
-                # Empty position
-                else:
-                    pygame.gfxdraw.filled_circle(surface, 50 + col * 100, 50 + row * 100, 10, (0, 0, 0))
-                    pygame.gfxdraw.aacircle(surface, 50 + col * 100, 50 + row * 100, 10, (0, 0, 0))
+                pygame.gfxdraw.filled_circle(surface, 50 + col * 100, 50 + row * 100, 10, (0, 0, 0))
+                pygame.gfxdraw.aacircle(surface, 50 + col * 100, 50 + row * 100, 10, (0, 0, 0))
         
     def _animate_board(self, p0, p1, player):
         global pygame
@@ -356,6 +360,7 @@ class MillEnv(AECEnv):
             
             # Draw the board and the animated piece.
             self._paint_board()
+            self._paint_pieces()
             self._paint_piece(round(x), round(y), color1, color2)
             pygame.display.flip()
 

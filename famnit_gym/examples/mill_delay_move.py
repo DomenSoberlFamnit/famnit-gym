@@ -8,7 +8,6 @@ env = mill.env(render_mode='human')
 # to have a pause between the moves.
 # Set the time limit or omit it for 5 seconds default.
 env = DelayMove(env, time_limit=10)
-
 env.reset()
 
 for agent in env.agent_iter():
