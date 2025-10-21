@@ -9,7 +9,7 @@ class SokobanEnv(gym.Env):
     metadata = {
         "name": "famnit_gym/Sokoban-v1",
         "render_modes": ["human"],
-        "render_fps": 60,
+        "render_fps": 60
     }
 
     action_direction = {
@@ -68,6 +68,7 @@ class SokobanEnv(gym.Env):
             
                 pygame.init()
                 self._surface = pygame.display.set_mode(self._map.window_size())
+                pygame.display.set_caption("Sokoban")
                 self._clock = pygame.time.Clock()
                 self._pygame_initialized = True
             
