@@ -123,6 +123,9 @@ class MillEnv(AECEnv):
         self._agent_selector = AgentSelector(self.agents)
         self.agent_selection = self._agent_selector.next()
 
+        # Render the empty board.
+        self.render()
+
     def step(self, action):
         # Get the current player and its opponent.
         agent = self.agent_selection
@@ -243,7 +246,7 @@ class MillEnv(AECEnv):
                     p1 = (50 + col * 100, 50 + row * 100)
                 else:
                     # Set up motion coordinates.
-                    p0 = (350, 800) if player_idx == 1 else (350, -100)
+                    p0 = (350, 750) if player_idx == 1 else (350, -50)
                     (row, col) = self._render_positions[self._animation['dst'] - 1]
                     p1 = (50 + col * 100, 50 + row * 100)
                 
@@ -258,15 +261,14 @@ class MillEnv(AECEnv):
                     # Set up motion coordinates.
                     (row, col) = self._render_positions[self._animation['captured'] - 1]
                     p0 = (50 + col * 100, 50 + row * 100)
-                    p1 = (350, 800) if player_idx == 1 else (350, -100)
+                    p1 = (350, 750) if player_idx == 1 else (350, -50)
 
                     # Animate the captured piece flying out.
                     self._animate_board(p0, p1, opponent_idx)
 
-            # Otherwise just paint the board.
-            else:
-                self._paint_board()
-                pygame.display.flip()
+            # Paint the current board.
+            self._paint_board()
+            pygame.display.flip()
     
     def _paint_piece(self, x, y, color1, color2):
         surface = self._surface
@@ -336,8 +338,8 @@ class MillEnv(AECEnv):
         duration = self.metadata['render_fps']
 
         # Compute the step made in a single frame.
-        dx = (x1 - x0) / duration
-        dy = (y1 - y0) / duration
+        dx = float(x1 - x0) / duration
+        dy = float(y1 - y0) / duration
 
         # Run the animation.
         x = x0
@@ -363,7 +365,7 @@ class MillEnv(AECEnv):
 
             # Check the length of the animation.
             duration -= 1
-            if duration <= 1:
+            if duration == 0:
                 running = False
 
             # Wait next frame.
