@@ -30,6 +30,12 @@ class MillModel:
         board._player = [dict(player) for player in self._player]
         return board
 
+    def get_state(self):
+        return self._board[1:]
+
+    def get_phase(self, player):
+        return self._player[player]['phase']
+
     def _in_mill(self, position):
         # Is the piece at the given position a part of a formed mill?
         for mill in self.mills:
@@ -65,7 +71,7 @@ class MillModel:
         return len(self._all_pieces(player))
 
     def legal_moves(self, player):
-        # If game has finished, there are no legal actions.
+        # If game has finished, there are no legal moves.
         if self.game_over():
             return []
 
@@ -164,8 +170,8 @@ class MillModel:
 
         return moves
 
-    def make_move(self, player, action):
-        (src, dst, take) = action
+    def make_move(self, player, move):
+        (src, dst, take) = move
 
         player_info = self._player[player]
         opponent = 2 if player == 1 else 1
