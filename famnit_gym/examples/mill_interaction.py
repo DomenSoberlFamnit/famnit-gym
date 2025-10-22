@@ -20,6 +20,13 @@ for agent in env.agent_iter():
         print("The game is too long!")
         break
 
+    # Let the user decide on the next move.
+    move = None
+
+    # Mark all positions to which the player can move a piece.
+    for [_, dst, _] in info["legal_moves"]:
+        env.mark_position(dst, (128, 128, 0, 128))  # yellow shade.
+
     # Here, the user interacts with the board for a while.
     # In this example, the interaction is done when the user
     # clicks on an empty position on the board.
@@ -40,14 +47,20 @@ for agent in env.agent_iter():
         # Use a different selection color for empty and occupied positions.
         elif event["type"] == "mouse_move":
             if observation[event["position"] - 1] == 0:
-                env.set_selection_color(64, 192, 0, 128)  # RGBA for empty.
+                env.set_selection_color((64, 192, 0, 128))  # Green shade.
             else:
-                env.set_selection_color(128, 128, 255, 255)  # RGBA for occupied.
+                env.set_selection_color((128, 128, 255, 255))  # Blue shade.
         
         # Only if clicked on an empty position, the game continues.
         elif event["type"] == "mouse_click":
             if observation[event["position"] - 1] == 0:
-                done_interacting = True
+                # Check if there is a legal move to move there.
+                for [src, dst, capture] in info["legal_moves"]:
+                    # If yes, chose this move and done interacting.
+                    if dst == event["position"]:
+                        move = [src, dst, capture]
+                        done_interacting = True
+                        break
 
         # If escape key has been pressed, the game is truncated.
         elif event["type"] == "key_press":
@@ -55,10 +68,13 @@ for agent in env.agent_iter():
                 done_interacting = True
                 truncation = True
     
+    # Now clear all the markings.
+    env.clear_markings()
+
     # Id truncated during the interaction, the user quit interactively.
     if truncation:
         print("User quit interactively!")
         break
 
-    # When done with interaction, a random move is executed.
-    env.step(None)
+    # Make the chosen move.
+    env.step(move)

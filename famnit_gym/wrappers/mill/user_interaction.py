@@ -26,6 +26,9 @@ class UserInteraction(AECEnv[AgentID, ObsType, ActionType]):
         # The position over which the mouse currently resides.
         self._selection_color = (128, 128, 255, 192)
 
+        # Marked positions.
+        self._markers = [None for _ in range(25)]
+
     def __getattr__(self, name: str) -> Any:
         if name.startswith("_") and name != "_cumulative_rewards":
             raise AttributeError(f"accessing private attribute '{name}' is prohibited")
@@ -35,8 +38,17 @@ class UserInteraction(AECEnv[AgentID, ObsType, ActionType]):
     def unwrapped(self) -> AECEnv:
         return self.env.unwrapped
 
-    def set_selection_color(self, red, green, blue, alpha) -> None:
-        self._selection_color = (red, green, blue, alpha)
+    def set_selection_color(self, color: tuple) -> None:
+        self._selection_color = color
+
+    def mark_position(self, position: int, color: tuple) -> None:
+        self._markers[position] = color
+
+    def unmark_position(self, position: int) -> None:
+        self._markers[position] = None
+    
+    def clear_markings(self) -> None:
+        self._markers = [None for _ in range(25)]
 
     def _selection_from_mouse(self, pos) -> (int, int, int):
         (x, y) = pos
@@ -101,6 +113,14 @@ class UserInteraction(AECEnv[AgentID, ObsType, ActionType]):
 
             # Draw the board.
             mill._paint_board()
+
+            # Mark the marked positions.
+            for (position, color) in enumerate(self._markers):
+                if color is not None:
+                    (row, col) = mill._render_positions[position - 1]
+                    (x, y) = (50 + col * 100, 50 + row * 100)
+                    pygame.gfxdraw.filled_circle(self._surface, x, y, 35, color)
+                    pygame.gfxdraw.aacircle(self._surface, x, y, 35, color)
 
             # Mark the selected position.
             if selected != 0:
