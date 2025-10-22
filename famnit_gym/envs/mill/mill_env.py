@@ -83,7 +83,8 @@ class MillEnv(AECEnv):
         return np.array(self._model._board)[1:]
     
     def close(self):
-        pass
+        if render_mode == "human":
+            pygame.close()
 
     def _get_opponent(self, agent):
         # Return the name of the opponent agent.
