@@ -59,7 +59,7 @@ priority = PriorityQueue()  # Priority queue based on the f-score.
 # Store the initial state into all three data structures.
 g_scores[initial_state] = 0
 transitions[initial_state] = (None, None)  # No parent, no action to get there.
-priority.put((heuristic(initial_state), initial_state)) # f(x) = 0 + f(x)
+priority.put((heuristic(initial_state), initial_state)) # f(x) = 0 + h(x)
 
 # Until either a solution is found or priority queue empties.
 solution = None
