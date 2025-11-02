@@ -114,3 +114,6 @@ for action in plan:
      # Allowe the user to close the window.
      if truncated:
         break
+
+# Close the environment.
+env.close()

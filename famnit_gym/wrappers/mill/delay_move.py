@@ -78,6 +78,9 @@ class DelayMove(AECEnv[AgentID, ObsType, ActionType]):
                 # Measure time.
                 time += 1 / self._fps
 
+                # Update the frame.
+                self.env.unwrapped._update_frame()
+
                 # Wait one frame.
                 self._clock.tick(self._fps)
             

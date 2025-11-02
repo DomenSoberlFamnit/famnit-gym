@@ -78,3 +78,6 @@ for agent in env.agent_iter():
 
     # Make the chosen move.
     env.step(move)
+
+# Close the environment.
+env.close()

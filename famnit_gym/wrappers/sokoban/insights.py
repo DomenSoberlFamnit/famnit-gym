@@ -87,13 +87,13 @@ class Insights(gym.Wrapper):
             }
         }
 
-    def _get_info(self):
-        return self._env._get_info() | self._get_insights()
+    def _augment_info(self, info):
+        return info | self._get_insights()
 
     def reset(self, seed: Optional[int] = None, options: Optional[dict] = None):
-        observation, _ = super().reset(seed=seed)
-        return observation, self._get_info()
+        observation, info = super().reset(seed=seed)
+        return observation, self._augment_info(info)
 
     def step(self, action: int):
-        observation, reward, terminated, truncated, _ = super().step(action)
-        return observation, reward, terminated, truncated, self._get_info()
+        observation, reward, terminated, truncated, info = super().step(action)
+        return observation, reward, terminated, truncated, self._augment_info(info)

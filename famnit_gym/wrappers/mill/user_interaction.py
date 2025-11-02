@@ -129,7 +129,9 @@ class UserInteraction(AECEnv[AgentID, ObsType, ActionType]):
 
             # Draw the pieces and finish drawing.
             mill._paint_pieces()
-            pygame.display.flip()
+
+            # Update the frame.
+            self.env.unwrapped._update_frame()
 
             # Wait one frame.
             self._clock.tick(self._fps)

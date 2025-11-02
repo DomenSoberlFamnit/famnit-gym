@@ -7,6 +7,7 @@ import famnit_gym.envs.sokoban as sokoban
 
 class SokobanEnv(gym.Env):
     metadata = {
+        "framework": "Gymnasium",
         "name": "famnit_gym/Sokoban-v1",
         "render_modes": ["human"],
         "render_fps": 60
@@ -30,6 +31,7 @@ class SokobanEnv(gym.Env):
             if 'scale' in options:
                 scale = options['scale']
         
+        # Do we use pygame?
         self._pygame_initialized = False
 
         self._map = sokoban.SokobanMap(
@@ -45,6 +47,9 @@ class SokobanEnv(gym.Env):
         )
         
         self.action_space = gym.spaces.Discrete(4)
+        
+        # Wrappers can set a frame callback that is called before updating the frame.
+        self._frame_callback = None
     
     def _get_obs(self):
         return self._map.get_array()
@@ -53,7 +58,7 @@ class SokobanEnv(gym.Env):
         return {
             'steps': self._steps
         }
-    
+
     def reset(self, seed: Optional[int] = None, options: Optional[dict] = None):
         super().reset(seed=seed)
 
@@ -73,7 +78,7 @@ class SokobanEnv(gym.Env):
                 self._pygame_initialized = True
             
             self._map.paint(self._surface)
-            pygame.display.flip()
+            self._update_frame()
 
         observation = self._get_obs()
         info = self._get_info()
@@ -106,7 +111,8 @@ class SokobanEnv(gym.Env):
 
                 self._map.animate_step()
                 self._map.paint(self._surface)
-                pygame.display.flip()
+                self._update_frame()
+
                 self._clock.tick(self.metadata['render_fps'])
         
         self._steps += 1
@@ -117,3 +123,13 @@ class SokobanEnv(gym.Env):
         info = self._get_info()
 
         return observation, reward, terminated, truncated, info
+
+    def _update_frame(self):
+        if self._frame_callback is not None:
+            self._frame_callback.paint(self._surface)
+        pygame.display.flip()
+
+    def close(self):
+        if self._pygame_initialized:
+            global pygame
+            pygame.quit()

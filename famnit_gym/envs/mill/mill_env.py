@@ -20,6 +20,7 @@ def transition_model(env):
 
 class MillEnv(AECEnv):
     metadata = {
+        "framework": "PettingZoo",
         "name": "rps_v2",
         "render_modes": ["ansi", "human"],
         "render_fps": 60
@@ -49,6 +50,9 @@ class MillEnv(AECEnv):
         # The model gets created at reset.
         self._model = None
 
+        # Do we use pygame?
+        self._pygame_initialized = False
+
         # If render mode is human, initialize pygame.
         if render_mode == "human":
             global pygame
@@ -70,6 +74,9 @@ class MillEnv(AECEnv):
 
             self._animation = None
 
+            # Wrappers can set a frame callback that is called before updating the frame.
+            self._frame_callback = None
+
     @functools.lru_cache(maxsize=None)
     def observation_space(self, agent):
         return self._observation_space
@@ -81,10 +88,6 @@ class MillEnv(AECEnv):
     def observe(self, agent):
         # All agents observe the same board.
         return np.array(self._model._board)[1:]
-    
-    def close(self):
-        if render_mode == "human":
-            pygame.close()
 
     def _get_opponent(self, agent):
         # Return the name of the opponent agent.
@@ -270,7 +273,7 @@ class MillEnv(AECEnv):
             # Paint the current board.
             self._paint_board()
             self._paint_pieces()
-            pygame.display.flip()
+            self._update_frame()
     
     def _paint_piece(self, x, y, color1, color2):
         # Paint a single piece at the given position.
@@ -363,7 +366,7 @@ class MillEnv(AECEnv):
             self._paint_board()
             self._paint_pieces()
             self._paint_piece(round(x), round(y), color1, color2)
-            pygame.display.flip()
+            self._update_frame()
 
             # Compute the next position of the animated piece.
             x += dx
@@ -376,3 +379,13 @@ class MillEnv(AECEnv):
 
             # Wait next frame.
             self._clock.tick(self.metadata['render_fps'])
+    
+    def _update_frame(self):
+        if self._frame_callback is not None:
+            self._frame_callback.paint(self._surface)
+        pygame.display.flip()
+    
+    def close(self):
+        if self._pygame_initialized:
+            global pygame
+            pygame.quit()

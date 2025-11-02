@@ -30,6 +30,9 @@ while not done:
     action = env.action_space.sample()
     _, _, terminated, truncated, _ = env.step(action)
     done = terminated or truncated
+
+# Close the environment.
+env.close()
 ```
 
 ### Actions
@@ -99,6 +102,22 @@ info = {
 ```
 ---
 
+### Wrapper Video
+
+`famnit_gym.wrappers.sokoban.Video`
+
+Saves the video to a file after the episode has finished.
+
+```python
+from famnit_gym.wrappers.sokoban import Video
+
+env = Video(env, filename='sokoban.mp4')
+
+env.close()  # Saves the episode recording to the file.
+```
+
+The `filename` parameter is optional and defaults to `'sokoban.mp4'`.
+
 ## Mill (Nine men's morris)
 
 A multi-agent Petting Zoo environment that implements the game of Nine men's morris, also known as Mill. This implementation adds diagonal connections to the standard horizontal/vertical board map.
@@ -126,6 +145,9 @@ for agent in env.agent_iter():
         break
     
     env.step(None)
+
+# Close the environment.
+env.close()
 ```
 
 ### Actions
@@ -172,6 +194,22 @@ Make the `step()` function block until the user presses a key, clicks a mouse, o
 `famnit_gym.wrappers.mill.UserInteraction`
 
 Allows interacting with the board by mouse or keyboard. Any board position can be marked with any color.
+
+### Wrapper Video
+
+`famnit_gym.wrappers.mill.Video`
+
+Saves the video to a file after the episode has finished.
+
+```python
+from famnit_gym.wrappers.mill import Video
+
+env = Video(env, filename='mill.mp4')
+
+env.close()  # Saves the episode recording to the file.
+```
+
+The `filename` parameter is optional and defaults to `'mill.mp4'`.
 
 ### Function transition_model
 

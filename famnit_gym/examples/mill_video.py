@@ -1,15 +1,20 @@
 import gymnasium as gym
 from famnit_gym.envs import mill
-from famnit_gym.wrappers.mill import DelayMove
+from famnit_gym.wrappers.mill import DelayMove, Video
 
+# The video wrapper will force 'human' render mode anyway.
 env = mill.env(render_mode='human')
 
-# Wrap the Mill environment into the DelayMove wrapper
-# to have a pause between the moves.
-# Set the time limit or omit it for 5 seconds default.
+# We will use the DelayMove wrapper with this example.
 env = DelayMove(env, time_limit=10)
+
+# Wrap it also in the Video wrapper to generate a video.
+env = Video(env, filename='mill.mp4')
+
+# Reset the environment.
 env.reset()
 
+# Execute random actions.
 for agent in env.agent_iter():
     observation, reward, termination, truncation, info = env.last()
 
@@ -21,10 +26,7 @@ for agent in env.agent_iter():
         print("The game is too long!")
         break
 
-    # The step method will wait for the key or mouse press,
-    # but not more than the set time limit, after which it
-    # will execute the given move.
     env.step(None)
 
-# Close the environment.
+# When closing, the video will be generated.
 env.close()

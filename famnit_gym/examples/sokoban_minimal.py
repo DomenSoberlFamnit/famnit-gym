@@ -11,3 +11,6 @@ while not done:
     action = env.action_space.sample()
     _, _, terminated, truncated, _ = env.step(action)
     done = terminated or truncated
+
+# Close the environment.
+env.close()

@@ -12,7 +12,7 @@ class Keyboard(gym.Wrapper):
 
         if type(env.unwrapped) is not sokoban.SokobanEnv:
             raise AttributeError(f'The wrapped environment must be an instance of the SokobanEnv class.')
-        
+
         self._env = env.unwrapped
         self._env._render_mode = 'human'
         
@@ -36,14 +36,16 @@ class Keyboard(gym.Wrapper):
             action = 3
 
         if keys[pygame.K_SPACE]:
-            self._env.reset()
+            self.env.reset()
         if keys[pygame.K_ESCAPE]:
             quit = True
 
         if quit:
-            return self._env._get_obs(), 0, False, True, self._env._get_info()
+            observation, _, _, _, info = self.env.step(action)
+            return observation, 0, False, True, info
 
         if action == -1:
+            self._env._update_frame()
             self._env._clock.tick(self._env.metadata['render_fps'])
 
-        return super().step(action)
+        return self.env.step(action)

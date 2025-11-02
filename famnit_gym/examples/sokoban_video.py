@@ -1,24 +1,25 @@
 import gymnasium as gym
 import famnit_gym
-from famnit_gym.wrappers.sokoban import Keyboard
+from famnit_gym.wrappers.sokoban import Keyboard, Video
 
 # Create and reset the environment.
 env = gym.make('famnit_gym/Sokoban-v1', render_mode='human')
 
-# Wrap the environment into the Keyboard wrapper.
+# We will use the Keyboard wrapper with this example.
 env = Keyboard(env)
+
+# Wrap it also in the Video wrapper to generate a video.
+env = Video(env, filename='sokoban.mp4')
 
 # Reset the environment.
 observation, info = env.reset()
 
-# Run until game over,
+# Run until game over.
 done = False
 while not done:
-    # Use input will be used instead of the given action.
     _, _, terminated, truncated, _ = env.step(0)
 
-    # The episode is truncated if the user quits the game.
     done = terminated or truncated
 
-# Close the environment.
+# When closing, the video will be generated.
 env.close()

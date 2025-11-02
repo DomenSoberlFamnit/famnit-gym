@@ -31,6 +31,8 @@ dependencies = [
   "pygame>=2.6.1",
   "typing_extensions>=4.15.0",
   "pettingzoo>=1.24.3",
+  "progress>=1.6.1",
+  "imageio-ffmpeg>=0.6.0",
 ]
 
 [project.urls]

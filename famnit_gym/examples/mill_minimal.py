@@ -24,3 +24,6 @@ for agent in env.agent_iter():
 
     # If None is given, a random action is executed.
     env.step(None)
+
+# Close the environment.
+env.close()
