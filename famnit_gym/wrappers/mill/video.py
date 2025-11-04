@@ -11,7 +11,6 @@ import pygame
 
 from progress.bar import Bar
 import imageio_ffmpeg
-import subprocess
 
 class FrameCallback:
     def __init__(self):
