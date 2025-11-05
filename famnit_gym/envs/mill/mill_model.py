@@ -220,6 +220,11 @@ class MillModel:
                 if opponent_info['pieces_playing'] <= 2:
                     opponent_info['phase'] = 'lost'
         
+        # Check if the opponent can make moves.
+        if len(self.legal_moves(opponent)) == 0:
+            # If not, the opponent lost the game.
+            opponent_info['phase'] = 'lost'
+        
         # Return the info.
         move_info = {
             'player_phase': player_info['phase'],
