@@ -60,7 +60,7 @@ class MillEnv(AECEnv):
             import pygame.gfxdraw
 
             pygame.init()
-            self._surface = pygame.display.set_mode((700, 700))
+            self._surface = pygame.display.set_mode((704, 704))
             pygame.display.set_caption("Mill")
             self._clock = pygame.time.Clock()
             self._pygame_initialized = True
@@ -243,16 +243,16 @@ class MillEnv(AECEnv):
                     self._model._board[self._animation['captured']] = opponent_idx
 
                 if self._animation['src'] > 0:                  
-                    # Set up motion coordinates.
+                    # Set up motion coordinates from src to dst.
                     (row, col) = self._render_positions[self._animation['src'] - 1]
-                    p0 = (50 + col * 100, 50 + row * 100)
+                    p0 = (52 + col * 100, 52 + row * 100)
                     (row, col) = self._render_positions[self._animation['dst'] - 1]
-                    p1 = (50 + col * 100, 50 + row * 100)
+                    p1 = (52 + col * 100, 52 + row * 100)
                 else:
-                    # Set up motion coordinates.
-                    p0 = (350, 750) if player_idx == 1 else (350, -50)
+                    # Set up motion coordinates from outside the board to dst.
+                    p0 = (352, 754) if player_idx == 1 else (352, -50)
                     (row, col) = self._render_positions[self._animation['dst'] - 1]
-                    p1 = (50 + col * 100, 50 + row * 100)
+                    p1 = (52 + col * 100, 52 + row * 100)
                 
                 # Animate the move from source to destination.
                 self._animate_board(p0, p1, player_idx)
@@ -264,8 +264,8 @@ class MillEnv(AECEnv):
                 if self._animation['captured'] > 0:
                     # Set up motion coordinates.
                     (row, col) = self._render_positions[self._animation['captured'] - 1]
-                    p0 = (50 + col * 100, 50 + row * 100)
-                    p1 = (350, 750) if player_idx == 1 else (350, -50)
+                    p0 = (52 + col * 100, 52 + row * 100)
+                    p1 = (352, 754) if player_idx == 1 else (352, -50)
 
                     # Animate the captured piece flying out.
                     self._animate_board(p0, p1, opponent_idx)
@@ -290,11 +290,11 @@ class MillEnv(AECEnv):
 
             # Player 1 piece
             if self._model._board[position] == 1:
-                self._paint_piece(50 + col * 100, 50 + row * 100, (128, 0, 64), (192, 0, 0))
+                self._paint_piece(52 + col * 100, 52 + row * 100, (128, 0, 64), (192, 0, 0))
             
             # Player 2 piece
             elif self._model._board[position] == 2:
-                self._paint_piece(50 + col * 100, 50 + row * 100, (128, 160, 0), (192, 192, 0))
+                self._paint_piece(52 + col * 100, 52 + row * 100, (128, 160, 0), (192, 192, 0))
 
     def _paint_board(self):
             surface = self._surface
@@ -303,27 +303,27 @@ class MillEnv(AECEnv):
             surface.fill("tan")
             
             # Squares
-            pygame.draw.rect(surface, "black", pygame.Rect((45, 45), (610, 610)), 10)
-            pygame.draw.rect(surface, "black", pygame.Rect((145, 145), (410, 410)), 10)
-            pygame.draw.rect(surface, "black", pygame.Rect((245, 245), (210, 210)), 10)
+            pygame.draw.rect(surface, "black", pygame.Rect((47, 47), (610, 610)), 10)
+            pygame.draw.rect(surface, "black", pygame.Rect((147, 147), (410, 410)), 10)
+            pygame.draw.rect(surface, "black", pygame.Rect((247, 247), (210, 210)), 10)
 
             # Cross
-            pygame.draw.line(surface, "black", pygame.math.Vector2((50, 350)), pygame.math.Vector2((250, 350)), 10)
-            pygame.draw.line(surface, "black", pygame.math.Vector2((450, 350)), pygame.math.Vector2((650, 350)), 10)
-            pygame.draw.line(surface, "black", pygame.math.Vector2((350, 50)), pygame.math.Vector2((350, 250)), 10)
-            pygame.draw.line(surface, "black", pygame.math.Vector2((350, 450)), pygame.math.Vector2((350, 650)), 10)
+            pygame.draw.line(surface, "black", pygame.math.Vector2((52, 352)), pygame.math.Vector2((252, 352)), 10)
+            pygame.draw.line(surface, "black", pygame.math.Vector2((452, 352)), pygame.math.Vector2((652, 352)), 10)
+            pygame.draw.line(surface, "black", pygame.math.Vector2((352, 52)), pygame.math.Vector2((352, 252)), 10)
+            pygame.draw.line(surface, "black", pygame.math.Vector2((352, 452)), pygame.math.Vector2((352, 652)), 10)
             
             # Diagonals
-            pygame.draw.line(surface, "black", pygame.math.Vector2((50, 50)), pygame.math.Vector2((250, 250)), 14)
-            pygame.draw.line(surface, "black", pygame.math.Vector2((450, 450)), pygame.math.Vector2((650, 650)), 14)
-            pygame.draw.line(surface, "black", pygame.math.Vector2((50, 650)), pygame.math.Vector2((250, 450)), 14)
-            pygame.draw.line(surface, "black", pygame.math.Vector2((450, 250)), pygame.math.Vector2((650, 50)), 14)
+            pygame.draw.line(surface, "black", pygame.math.Vector2((52, 52)), pygame.math.Vector2((252, 252)), 14)
+            pygame.draw.line(surface, "black", pygame.math.Vector2((452, 452)), pygame.math.Vector2((652, 652)), 14)
+            pygame.draw.line(surface, "black", pygame.math.Vector2((52, 652)), pygame.math.Vector2((252, 452)), 14)
+            pygame.draw.line(surface, "black", pygame.math.Vector2((452, 252)), pygame.math.Vector2((652, 52)), 14)
 
             # Circles
             for (i, (row, col)) in enumerate(self._render_positions):
                 position = i + 1
-                pygame.gfxdraw.filled_circle(surface, 50 + col * 100, 50 + row * 100, 10, (0, 0, 0))
-                pygame.gfxdraw.aacircle(surface, 50 + col * 100, 50 + row * 100, 10, (0, 0, 0))
+                pygame.gfxdraw.filled_circle(surface, 52 + col * 100, 52 + row * 100, 10, (0, 0, 0))
+                pygame.gfxdraw.aacircle(surface, 52 + col * 100, 52 + row * 100, 10, (0, 0, 0))
         
     def _animate_board(self, p0, p1, player):
         global pygame

@@ -57,7 +57,7 @@ class UserInteraction(AECEnv[AgentID, ObsType, ActionType]):
         
         # Iterate through all positions and find over which one the mouse hovers.
         for (i, (row, col)) in enumerate(self.env.unwrapped._render_positions):
-            (sel_x, sel_y) = (50 + col * 100, 50 + row * 100)  # Central point
+            (sel_x, sel_y) = (52 + col * 100, 52 + row * 100)  # Central point
             if x >= sel_x - 30 and x <= sel_x + 30 and y >= sel_y - 30 and y <= sel_y + 30:
                 selected = i + 1
                 break
@@ -118,7 +118,7 @@ class UserInteraction(AECEnv[AgentID, ObsType, ActionType]):
             for (position, color) in enumerate(self._markers):
                 if color is not None:
                     (row, col) = mill._render_positions[position - 1]
-                    (x, y) = (50 + col * 100, 50 + row * 100)
+                    (x, y) = (52 + col * 100, 52 + row * 100)
                     pygame.gfxdraw.filled_circle(self._surface, x, y, 35, color)
                     pygame.gfxdraw.aacircle(self._surface, x, y, 35, color)
 
