@@ -1,8 +1,7 @@
 from __future__ import annotations
-from typing import Any, Optional
+from typing import Any
 
 import os
-import shutil
 
 import numpy as np
 import gymnasium as gym
@@ -22,7 +21,7 @@ class FrameCallback:
         self.frame += 1
 
 class Video(AECEnv[AgentID, ObsType, ActionType]):
-    def __init__(self, env: AECEnv[AgentID, ObsType, ActionType], filename='mill.mp4'):
+    def __init__(self, env: AECEnv[AgentID, ObsType, ActionType], filename='mill.webm'):
         self._closed = True
         super().__init__()
         
@@ -79,8 +78,25 @@ class Video(AECEnv[AgentID, ObsType, ActionType]):
         if len(env._frame_callback.frames) > 0:
             fps = env.metadata["render_fps"]
             size = env._frame_callback.frames[0].get_size()
+            quality = 10
+            options = {}
+
+            extension = os.path.splitext(self._filename)[1].lower()
+            if extension == ".mp4":
+                quality = 9
+                options.update(
+                    codec="libx264",
+                    output_params=["-profile:v", "baseline"]
+                )
+            elif extension == ".webm":
+                options.update(
+                    codec="libvpx-vp9",
+                    output_params=["-crf", "30", "-b:v", "0"]
+                )
             
-            writer = imageio_ffmpeg.write_frames(self._filename, size=size, fps=60, quality=10)
+            writer = imageio_ffmpeg.write_frames(
+                self._filename, size=size, fps=fps, quality=quality, **options
+            )
             writer.send(None)
             
             bar = Bar('Generating video', max=len(env._frame_callback.frames))
@@ -93,10 +109,10 @@ class Video(AECEnv[AgentID, ObsType, ActionType]):
             writer.close()
             bar.finish()
     
-    def observation_space(self, agent: AgentID) -> gymnasium.spaces.Space:
+    def observation_space(self, agent: AgentID) -> gym.spaces.Space:
         return self.env.observation_space(agent)
 
-    def action_space(self, agent: AgentID) -> gymnasium.spaces.Space:
+    def action_space(self, agent: AgentID) -> gym.spaces.Space:
         return self.env.action_space(agent)
 
     def __str__(self) -> str:

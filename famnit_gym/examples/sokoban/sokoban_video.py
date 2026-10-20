@@ -9,7 +9,7 @@ env = gym.make('famnit_gym/Sokoban-v1', render_mode='human')
 env = Keyboard(env)
 
 # Wrap it also in the Video wrapper to generate a video.
-env = Video(env, filename='sokoban.mp4')
+env = Video(env, filename='sokoban.webm')
 
 # Reset the environment.
 observation, info = env.reset()

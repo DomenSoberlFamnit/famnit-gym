@@ -1,0 +1,1 @@
+from famnit_gym.envs.astronaut.astronaut_env import AstronautEnv

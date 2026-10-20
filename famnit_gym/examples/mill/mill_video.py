@@ -9,7 +9,7 @@ env = mill.env(render_mode='human')
 env = DelayMove(env, time_limit=10)
 
 # Wrap it also in the Video wrapper to generate a video.
-env = Video(env, filename='mill.mp4')
+env = Video(env, filename='mill.webm')
 
 # Reset the environment.
 env.reset()

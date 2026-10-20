@@ -49,7 +49,7 @@ class Insights(gym.Wrapper):
         # Evaluate possible actions.
         actions_moving = []
         actions_pushing = []
-        if (player_x, player_y) is not (None, None):
+        if (player_x, player_y) != (None, None):
             for action, (dx, dy) in self._env.action_direction.items():
                 x1 = player_x + dx
                 y1 = player_y + dy

@@ -48,7 +48,7 @@ class SokobanEnv(gym.Env):
         
         self.action_space = gym.spaces.Discrete(4)
         
-        # Wrappers can set a frame callback that is called before updating the frame.
+        # Wrappers can set a frame callback, which is called before updating the frame.
         self._frame_callback = None
     
     def _get_obs(self):

@@ -50,7 +50,7 @@ class UserInteraction(AECEnv[AgentID, ObsType, ActionType]):
     def clear_markings(self) -> None:
         self._markers = [None for _ in range(25)]
 
-    def _selection_from_mouse(self, pos) -> (int, int, int):
+    def _selection_from_mouse(self, pos) -> tuple[int, int, int]:
         (x, y) = pos
         selected = 0
         sel_x, sel_y = 0, 0

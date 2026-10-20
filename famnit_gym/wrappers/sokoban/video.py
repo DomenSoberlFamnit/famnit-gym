@@ -1,6 +1,4 @@
 import os
-import shutil
-from typing import Optional
 
 import numpy as np
 import gymnasium as gym
@@ -50,8 +48,25 @@ class Video(gym.Wrapper):
         if len(self._env._frame_callback.frames) > 0:
             fps = self._env.metadata["render_fps"]
             size = self._env._frame_callback.frames[0].get_size()
-            
-            writer = imageio_ffmpeg.write_frames(self._filename, size=size, fps=60, quality=10)
+            quality = 10
+            options = {}
+
+            extension = os.path.splitext(self._filename)[1].lower()
+            if extension == ".mp4":
+                quality = 9
+                options.update(
+                    codec="libx264",
+                    output_params=["-profile:v", "baseline"]
+                )
+            elif extension == ".webm":
+                options.update(
+                    codec="libvpx-vp9",
+                    output_params=["-crf", "0", "-b:v", "0"]
+                )
+
+            writer = imageio_ffmpeg.write_frames(
+                self._filename, size=size, fps=fps, quality=quality, **options
+            )
             writer.send(None)
             
             bar = Bar('Generating video', max=len(self._env._frame_callback.frames))

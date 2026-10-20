@@ -81,7 +81,7 @@ class SokobanMap:
         self._images = {}
         for image_name in self._image_names:
             # Load the PNG file.
-            img = pygame.image.load(f'{dir}/img/{image_name}.png')
+            img = pygame.image.load(f'{dir}/assets/{image_name}.png')
             
             # The size of the tile has to match other tiles.
             if self._tile_size is None:

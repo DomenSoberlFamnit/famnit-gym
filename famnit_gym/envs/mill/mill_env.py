@@ -2,7 +2,7 @@ import functools
 import numpy as np
 import gymnasium as gym
 from pettingzoo import AECEnv
-from pettingzoo.utils import agent_selector as AgentSelector
+from pettingzoo.utils import AgentSelector
 
 from famnit_gym.envs.mill.mill_model import MillModel
 
@@ -74,7 +74,7 @@ class MillEnv(AECEnv):
 
             self._animation = None
 
-            # Wrappers can set a frame callback that is called before updating the frame.
+            # Wrappers can set a frame callback, which is called before updating the frame.
             self._frame_callback = None
 
     @functools.lru_cache(maxsize=None)
