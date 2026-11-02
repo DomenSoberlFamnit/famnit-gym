@@ -61,9 +61,10 @@ class Oxygen(gym.Wrapper):
         self._graphics_initialized = True
 
     def _spawn_oxygen(self, offset_x=0):
+        rnd = self.unwrapped.np_random
         self._oxygen_back = dict(self._oxygen_front)
         self._oxygen_front['x'] = 1300 + offset_x
-        self._oxygen_front['y'] = np.random.randint(200, 600)
+        self._oxygen_front['y'] = rnd.integers(200, 600)
         self._oxygen_front['seen'] = True
 
     def reset(self, seed: Optional[int] = None, options: Optional[dict] = None):

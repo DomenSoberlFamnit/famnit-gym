@@ -105,7 +105,7 @@ class AstronautEnv(gym.Env):
         super().reset(seed=seed, options=options)
 
         if options is not None:
-            self._options = options
+            self._options = AstronautEnv.apply_options(options)
 
         self._steps = 0
         
@@ -148,7 +148,7 @@ class AstronautEnv(gym.Env):
             self._landscape['x'] += 1200
         
         # Move the astronaut.
-        self._astronaut['acceleration'] = (self._options['thrust'] if self._astronaut['thrust'] else 0.0 - self._options['gravity'])
+        self._astronaut['acceleration'] = (self._options['thrust'] - self._options['gravity'] if self._astronaut['thrust'] else 0.0 - self._options['gravity'])
         self._astronaut['velocity'] += self._astronaut['acceleration'] * dt
         self._astronaut['y'] += self._astronaut['velocity'] * dt
 

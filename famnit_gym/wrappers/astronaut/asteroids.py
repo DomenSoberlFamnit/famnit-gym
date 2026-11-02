@@ -64,10 +64,11 @@ class Asteroids(gym.Wrapper):
         self._graphics_initialized = True
 
     def _spawn_asteroid(self):
+        rnd = self.unwrapped.np_random
         self._asteroid_back = dict(self._asteroid_front)
         self._asteroid_front['x'] = 1300
-        self._asteroid_front['y'] = np.random.randint(200, 600)
-        self._asteroid_front['type'] = np.random.randint(0, 3) + 1
+        self._asteroid_front['y'] = rnd.integers(200, 600)
+        self._asteroid_front['type'] = rnd.integers(0, 3) + 1
 
     def reset(self, seed: Optional[int] = None, options: Optional[dict] = None):
         super().reset(seed=seed, options=options)

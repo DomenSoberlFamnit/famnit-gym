@@ -87,7 +87,7 @@ class MillEnv(AECEnv):
 
     def observe(self, agent):
         # All agents observe the same board.
-        return np.array(self._model._board)[1:]
+        return np.array(self._model._board, dtype=np.uint8)[1:]
 
     def _get_opponent(self, agent):
         # Return the name of the opponent agent.

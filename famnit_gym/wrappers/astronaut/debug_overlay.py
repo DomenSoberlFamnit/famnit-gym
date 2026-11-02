@@ -20,11 +20,11 @@ class DebugOverlay(gym.Wrapper):
         self._base_get_info = self.env.get_wrapper_attr("_get_info")
         self._base_get_reward_info = self.env.get_wrapper_attr("_get_reward_info")
 
-        # We keep track of the cumulative reward.
-        self._sum_reward = 0
-
         # Graphics for this wrapper not yet initialized.
         self._graphics_initialized = False
+
+        # We keep track of the cumulative reward.
+        self._sum_reward = 0
 
     def _get_obs(self):
         return self._base_get_obs()
@@ -47,9 +47,9 @@ class DebugOverlay(gym.Wrapper):
         self._graphics_initialized = True
 
     def reset(self, seed: Optional[int] = None, options: Optional[dict] = None):
-        return super().reset(seed=seed, options=options)
-        
         self._sum_reward = 0
+        
+        return super().reset(seed=seed, options=options)
 
     def _simulation_step(self, action: int):
         # Call the base simulation step.

@@ -34,7 +34,7 @@ class Video(AECEnv[AgentID, ObsType, ActionType]):
             raise AttributeError(f'The wrapped environment does not allow video rendering.')
         
         self._filename = filename
-        self.env.unwrapped._render_mode = 'human'
+        self.env.unwrapped.render_mode = 'human'
         self.env.unwrapped._frame_callback = FrameCallback()
         self._ffmpeg_binary = imageio_ffmpeg.get_ffmpeg_exe()
         self._closed = False

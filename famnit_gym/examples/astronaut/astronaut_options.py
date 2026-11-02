@@ -12,7 +12,7 @@ reward_function = lambda reward_info: (
 options = {
     'astronaut_x': 600,  # pixels (default 300)
     'speed': 800,        # pixels / second (default 500)
-    'thrust': 150,       # pixels / second squared (default 1000)
+    'thrust': 350,       # pixels / second squared (default 1000)
     'gravity': 200,      # pixels / second squared (default 400)
     'max_steps': 300,    # When to truncate the episode (default 1200)
     'reward_function': reward_function  # A custom reward function (default None)
